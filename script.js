@@ -198,6 +198,16 @@ document.getElementById('avlForm').addEventListener('submit', (event) => {
     }
 });
 
+const valueDisplay = document.querySelector("#value");
+const input = document.querySelector("#vel");
+valueDisplay.textContent = input.value;
+let timeoutDuration = input.value * 1000;
+
+input.addEventListener("input", (event) => {
+    valueDisplay.textContent = event.target.value;
+    timeoutDuration = event.target.value * 1000;
+});
+
 document.getElementById("avlForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const numbers = generateRandomNumbersArray();
@@ -210,7 +220,7 @@ document.getElementById("avlForm").addEventListener("submit", async (e) => {
             const positions = calculatePositions(tree.root, canvas.width / 2, 30);
             drawNode(ctx, tree.root, positions);
         }
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, timeoutDuration));
     }
 
     document.getElementById("valueInputNumbers").value = "";
@@ -224,3 +234,5 @@ function generateRandomNumbersArray() {
     }
     return randomNumbers;
 }
+
+
