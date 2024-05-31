@@ -4,6 +4,7 @@ class Node {
         this.left = null;
         this.right = null;
         this.height = 1;
+        this.subtreeWidth = 1;  // Inicializando com largura de 1
     }
 }
 
@@ -34,6 +35,8 @@ class AVLTree {
         this.updateHeight(node);
         this.updateHeight(nodeLeftChild);
 
+        console.log("Rotação para direita!");
+
         return nodeLeftChild;
     }
 
@@ -46,6 +49,8 @@ class AVLTree {
 
         this.updateHeight(node);
         this.updateHeight(nodeRightChild);
+
+        console.log("Rotação para esquerda!");
 
         return nodeRightChild;
     }
@@ -97,24 +102,27 @@ function calculateSubtreeWidths(node) {
     const leftWidth = calculateSubtreeWidths(node.left);
     const rightWidth = calculateSubtreeWidths(node.right);
 
-    node.subtreeWidth = Math.max(leftWidth, rightWidth) + 1;
+    node.subtreeWidth = leftWidth + rightWidth + 1;  // Total width of left + right subtrees + node itself
     return node.subtreeWidth;
 }
 
-function calculatePositions(node, x, y, level = 1, positions = {}) {
+function calculatePositions(node, x, y, positions = {}, xOffset = 0) {
     if (!node) return positions;
 
-    const levelGap = 80;
-    const horizontalGap = 40 * node.subtreeWidth;
+    const horizontalGap = 40;
 
-    positions[node.value] = { x, y };
+    const leftWidth = node.left ? node.left.subtreeWidth : 0;
+    const rightWidth = node.right ? node.right.subtreeWidth : 0;
+
+    const currentX = x + xOffset;
+    positions[node.value] = { x: currentX, y };
 
     if (node.left) {
-        calculatePositions(node.left, x - horizontalGap, y + levelGap, level + 1, positions);
+        calculatePositions(node.left, x, y + 80, positions, xOffset - (rightWidth + 1) * horizontalGap / 2);
     }
 
     if (node.right) {
-        calculatePositions(node.right, x + horizontalGap, y + levelGap, level + 1, positions);
+        calculatePositions(node.right, x, y + 80, positions, xOffset + (leftWidth + 1) * horizontalGap / 2);
     }
 
     return positions;
@@ -189,3 +197,30 @@ document.getElementById('avlForm').addEventListener('submit', (event) => {
         document.getElementById('valueInput').value = '';
     }
 });
+
+document.getElementById("avlForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const numbers = generateRandomNumbersArray();
+
+    for (const number of numbers) {
+        if (!isNaN(number)) {
+            tree.insertValue(parseInt(number));
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            calculateSubtreeWidths(tree.root);
+            const positions = calculatePositions(tree.root, canvas.width / 2, 30);
+            drawNode(ctx, tree.root, positions);
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    document.getElementById("valueInputNumbers").value = "";
+});
+
+function generateRandomNumbersArray() {
+    const randomNumbers = [];
+    for (let i = 0; i < 20; i++) {
+        const randomNumber = Math.floor(Math.random() * 60) + 1;
+        randomNumbers.push(randomNumber.toString());
+    }
+    return randomNumbers;
+}
