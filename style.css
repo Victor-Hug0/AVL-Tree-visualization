@@ -12,8 +12,24 @@ body {
     text-align: center;
 }
 
-form {
+.inputs {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
     margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 canvas {

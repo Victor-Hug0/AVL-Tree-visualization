@@ -4,7 +4,7 @@ class Node {
         this.left = null;
         this.right = null;
         this.height = 1;
-        this.subtreeWidth = 1;  // Inicializando com largura de 1
+        this.subtreeWidth = 1; 
     }
 }
 
@@ -102,7 +102,7 @@ function calculateSubtreeWidths(node) {
     const leftWidth = calculateSubtreeWidths(node.left);
     const rightWidth = calculateSubtreeWidths(node.right);
 
-    node.subtreeWidth = leftWidth + rightWidth + 1;  // Total width of left + right subtrees + node itself
+    node.subtreeWidth = leftWidth + rightWidth + 1;
     return node.subtreeWidth;
 }
 
@@ -208,7 +208,7 @@ input.addEventListener("input", (event) => {
     timeoutDuration = event.target.value * 1000;
 });
 
-document.getElementById("avlForm").addEventListener("submit", async (e) => {
+document.getElementById("btn-numbers").addEventListener("click", async (e) => {
     e.preventDefault();
     const numbers = generateRandomNumbersArray();
 
