@@ -142,6 +142,7 @@ function drawNode(ctx, node, positions) {
 
     ctx.fillStyle = '#000';
     ctx.textAlign = 'center';
+    ctx.font = "16px Roboto";
     ctx.textBaseline = 'middle';
     ctx.fillText(node.value, x, y);
 
